@@ -5,7 +5,7 @@ from inference_sdk.webrtc import WebcamSource, StreamConfig, VideoMetadata
 # Initialize client
 client = InferenceHTTPClient.init(
     api_url="https://serverless.roboflow.com",
-    api_key="DXYjbmlbSJIze71C80LA"
+    api_key="YOUR API KEY"
 )
 
 # Configure video source (webcam)
