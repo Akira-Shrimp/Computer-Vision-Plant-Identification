@@ -2,6 +2,7 @@ import cv2
 from inference_sdk import InferenceHTTPClient
 from inference_sdk.webrtc import WebcamSource, StreamConfig, VideoMetadata
 
+from deploy.robot_controller import send_coordinates_to_robot
 # Initialize client
 client = InferenceHTTPClient.init(
     api_url="https://serverless.roboflow.com",
