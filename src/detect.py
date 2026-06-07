@@ -49,7 +49,8 @@ def on_data(data: dict, metadata: VideoMetadata):
             object = pred.get("class")
             x = pred.get("x")
             y = pred.get("y")
-            print(f"Found {object} at coordinates: X={x}, Y={y}")
+            if ten_vat_the == "tomato":
+                send_coordinates_to_robot(x, y)
 
 
 # Handle prediction data via datachannel (code cũ của model. thay thế vì cục dữ liệu khạc ra quá to)
