@@ -30,16 +30,31 @@ session = client.webrtc.stream(
 )
 
 # Handle incoming video frames
+
 @session.on_frame
 def show_frame(frame, metadata):
     cv2.imshow("Workflow Output", frame)
     if cv2.waitKey(1) & 0xFF == ord("q"):
         session.close()
 
+
 # Handle prediction data via datachannel
 @session.on_data()
 def on_data(data: dict, metadata: VideoMetadata):
-    print(f"Frame {metadata.frame_id}: {data}")
+    # check if found object
+    if "predictions" in data and len(data["predictions"]) > 0:
+        for pred in data["predictions"]:
+            # Lấy thông tin class và tọa độ trung tâm
+            object = pred.get("class")
+            x = pred.get("x")
+            y = pred.get("y")
+            print(f"Found {object} at coordinates: X={x}, Y={y}")
+
+
+# Handle prediction data via datachannel (code cũ của model. thay thế vì cục dữ liệu khạc ra quá to)
+#@session.on_data()
+#def on_data(data: dict, metadata: VideoMetadata):
+#    print(f"Frame {metadata.frame_id}: {data}")
 
 # Run the session (blocks until closed)
 session.run()
