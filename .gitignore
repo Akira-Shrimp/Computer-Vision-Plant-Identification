@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Plant Vision — Project-specific
+.env
+logs/
+data/captures/
+data/growth_logs/

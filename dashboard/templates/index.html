@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plant Vision — Real-time plant growth monitoring and automated harvesting dashboard">
+    <title>🌱 Plant Vision — Monitoring Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <!-- ── Header ──────────────────────────────────────────── -->
+    <header id="main-header">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-icon">🌱</span>
+                <div class="logo-text">
+                    <h1>Plant Vision</h1>
+                    <span class="logo-subtitle">Automated Harvest Monitor</span>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="status-pill" id="connection-status">
+                <span class="status-dot"></span>
+                <span class="status-text">Connecting...</span>
+            </div>
+            <div class="uptime-display" id="uptime">00:00:00</div>
+        </div>
+    </header>
+
+    <!-- ── Main Content ────────────────────────────────────── -->
+    <main id="dashboard-main">
+
+        <!-- ── Stats Row ───────────────────────────────────── -->
+        <section class="stats-row" id="stats-section">
+            <div class="stat-card" id="stat-detections">
+                <div class="stat-icon">🍅</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="detection-count">0</div>
+                    <div class="stat-label">Detections</div>
+                </div>
+                <div class="stat-trend up" id="detection-trend">—</div>
+            </div>
+            <div class="stat-card" id="stat-ripe-ratio">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="ripe-ratio">0%</div>
+                    <div class="stat-label">Ripeness Ratio</div>
+                </div>
+                <div class="stat-trend" id="ripe-trend">—</div>
+            </div>
+            <div class="stat-card" id="stat-robot-cmds">
+                <div class="stat-icon">🤖</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="robot-commands">0</div>
+                    <div class="stat-label">Robot Commands</div>
+                </div>
+                <div class="stat-trend" id="robot-trend">—</div>
+            </div>
+            <div class="stat-card" id="stat-snapshots">
+                <div class="stat-icon">📸</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="snapshot-count">0</div>
+                    <div class="stat-label">Snapshots</div>
+                </div>
+                <div class="stat-trend" id="snapshot-trend">—</div>
+            </div>
+        </section>
+
+        <!-- ── Main Grid ───────────────────────────────────── -->
+        <section class="main-grid">
+
+            <!-- Camera Feed -->
+            <div class="card card-camera" id="camera-card">
+                <div class="card-header">
+                    <h2><span class="card-icon">📹</span> Live Camera Feed</h2>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-ghost" id="btn-screenshot" title="Take Screenshot">
+                            📷
+                        </button>
+                        <div class="live-badge">
+                            <span class="live-dot"></span> LIVE
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body camera-body">
+                    <img id="camera-feed" src="/video_feed" alt="Live Camera Feed" onerror="this.style.display='none'; document.getElementById('camera-placeholder').style.display='flex';">
+                    <div id="camera-placeholder" class="camera-placeholder" style="display:none;">
+                        <span class="placeholder-icon">📷</span>
+                        <span>Camera not available</span>
+                        <span class="placeholder-sub">Check connection and restart</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Growth Chart -->
+            <div class="card card-growth" id="growth-card">
+                <div class="card-header">
+                    <h2><span class="card-icon">📈</span> Growth Tracking</h2>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-primary" id="btn-snapshot-now">
+                            📸 Snapshot
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="growth-chart"></canvas>
+                </div>
+                <div class="card-footer">
+                    <span class="trend-label">Trend:</span>
+                    <span class="trend-badge" id="growth-trend-badge">Analyzing...</span>
+                </div>
+            </div>
+
+            <!-- Detection Details -->
+            <div class="card card-detections" id="detections-card">
+                <div class="card-header">
+                    <h2><span class="card-icon">🔍</span> Detection Feed</h2>
+                </div>
+                <div class="card-body">
+                    <div class="detection-list" id="detection-list">
+                        <div class="detection-empty">
+                            <span>Waiting for detections...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Robot Status -->
+            <div class="card card-robot" id="robot-card">
+                <div class="card-header">
+                    <h2><span class="card-icon">🤖</span> Robot Controller</h2>
+                </div>
+                <div class="card-body">
+                    <div class="robot-status-grid">
+                        <div class="robot-field">
+                            <span class="field-label">Status</span>
+                            <span class="field-value" id="robot-status-text">
+                                <span class="status-dot offline"></span> Offline
+                            </span>
+                        </div>
+                        <div class="robot-field">
+                            <span class="field-label">Mode</span>
+                            <span class="field-value" id="robot-mode">—</span>
+                        </div>
+                        <div class="robot-field">
+                            <span class="field-label">Port</span>
+                            <span class="field-value" id="robot-port">—</span>
+                        </div>
+                        <div class="robot-field">
+                            <span class="field-label">Last Command</span>
+                            <span class="field-value mono" id="robot-last-cmd">—</span>
+                        </div>
+                        <div class="robot-field">
+                            <span class="field-label">Last Coordinates</span>
+                            <span class="field-value mono" id="robot-last-coords">—</span>
+                        </div>
+                    </div>
+                    <div class="robot-actions">
+                        <button class="btn btn-warning" id="btn-robot-home">
+                            🏠 Send Home
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Info -->
+            <div class="card card-system" id="system-card">
+                <div class="card-header">
+                    <h2><span class="card-icon">⚙️</span> System Info</h2>
+                </div>
+                <div class="card-body">
+                    <div class="system-info-grid" id="system-info">
+                        <div class="info-row">
+                            <span class="info-label">Camera</span>
+                            <span class="info-value" id="sys-camera">—</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Confidence</span>
+                            <span class="info-value" id="sys-confidence">—</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Target Classes</span>
+                            <span class="info-value" id="sys-classes">—</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Growth Interval</span>
+                            <span class="info-value" id="sys-interval">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- ── Notification Toast ──────────────────────────────── -->
+    <div id="toast-container"></div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
