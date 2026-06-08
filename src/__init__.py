@@ -1,4 +1,2 @@
-# Source package
-from src.detect import PlantDetector
-from src.growth_tracker import GrowthTracker
-from src.data_collector import DataCollector
+# Source package — use explicit imports to avoid requiring all dependencies at import time
+# e.g.: from src.detect import PlantDetector

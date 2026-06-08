@@ -16,6 +16,10 @@ import os
 import logging
 from pathlib import Path
 
+# Fix Windows console encoding for Unicode output
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 # Ensure project root is on the path
 PROJECT_ROOT = Path(__file__).parent.resolve()
 sys.path.insert(0, str(PROJECT_ROOT))
@@ -159,15 +163,17 @@ def cmd_status(settings):
     print("╔══════════════════════════════════════════════════════╗")
     print("║       PLANT VISION — System Configuration           ║")
     print("╠══════════════════════════════════════════════════════╣")
+    cam_info = f"{settings.CAMERA_WIDTH}x{settings.CAMERA_HEIGHT} @ index {settings.CAMERA_INDEX}"
+    dash_url = f"http://{settings.DASHBOARD_HOST}:{settings.DASHBOARD_PORT}"
     print(f"║  Roboflow API:    {settings.ROBOFLOW_API_URL:<35s}║")
     print(f"║  Workflow:        {settings.ROBOFLOW_WORKFLOW:<35s}║")
     print(f"║  Workspace:       {settings.ROBOFLOW_WORKSPACE:<35s}║")
-    print(f"║  Camera:          {settings.CAMERA_WIDTH}x{settings.CAMERA_HEIGHT} @ index {settings.CAMERA_INDEX:<19s}║")
+    print(f"║  Camera:          {cam_info:<35s}║")
     print(f"║  Serial Port:     {settings.SERIAL_PORT:<35s}║")
     print(f"║  Robot Mode:      {'SIMULATION' if settings.ROBOT_SIMULATION else 'LIVE':<35s}║")
     print(f"║  Confidence:      {settings.CONFIDENCE_THRESHOLD:<35.0%}║")
     print(f"║  Target Classes:  {', '.join(settings.TARGET_CLASSES):<35s}║")
-    print(f"║  Dashboard:       http://{settings.DASHBOARD_HOST}:{settings.DASHBOARD_PORT:<24}║")
+    print(f"║  Dashboard:       {dash_url:<35s}║")
     print("╠══════════════════════════════════════════════════════╣")
 
     # Validate
