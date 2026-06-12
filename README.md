@@ -1,4 +1,4 @@
-#Plant Vision — Computer Vision Plant Identification
+# Plant Vision — Computer Vision Plant Identification
 
 A computer vision system that uses a camera to monitor plant growth, identify ripe tomatoes and peppers, and assist automated robotic harvesting.
 
