@@ -1,2 +1,7 @@
 opencv-python
 inference-sdk
+pyserial
+flask
+flask-socketio
+python-dotenv
+numpy
