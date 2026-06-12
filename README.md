@@ -1,4 +1,4 @@
-# 🌱 Plant Vision — Computer Vision Plant Identification
+#Plant Vision — Computer Vision Plant Identification
 
 A computer vision system that uses a camera to monitor plant growth, identify ripe tomatoes and peppers, and assist automated robotic harvesting.
 
@@ -6,18 +6,18 @@ Hệ thống thị giác máy tính sử dụng camera để theo dõi quá trì
 
 ---
 
-## 🚀 Features
+## Features
 
 | Feature | Description |
 |---------|-------------|
-| 🎯 **Real-time Detection** | Detect tomatoes & peppers via Roboflow AI + WebRTC streaming |
-| 📈 **Growth Tracking** | Monitor plant development over time with ripeness ratio analysis |
-| 🤖 **Robot Integration** | Send harvest coordinates to robot arm via Serial (Arduino/ESP32) |
-| 📷 **Data Collection** | Interactive tool to capture & label training images from webcam |
-| 🖥️ **Web Dashboard** | Real-time monitoring dashboard with live camera feed & charts |
-| 🎨 **Custom Visualization** | Styled bounding boxes, FPS overlay, detection summary |
+|  **Real-time Detection** | Detect tomatoes & peppers via Roboflow AI + WebRTC streaming |
+|  **Growth Tracking** | Monitor plant development over time with ripeness ratio analysis |
+|  **Robot Integration** | Send harvest coordinates to robot arm via Serial (Arduino/ESP32) |
+|  **Data Collection** | Interactive tool to capture & label training images from webcam |
+|  **Web Dashboard** | Real-time monitoring dashboard with live camera feed & charts |
+|  **Custom Visualization** | Styled bounding boxes, FPS overlay, detection summary |
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Computer-Vision-Plant-Identification/
@@ -45,7 +45,7 @@ Computer-Vision-Plant-Identification/
 └── todo-list.md               # Project roadmap
 ```
 
-## ⚡ Quick Start
+##  Quick Start
 
 ### 1. Install Dependencies
 
@@ -93,13 +93,13 @@ python main.py dashboard
 ```
 
 Features:
-- 📹 Live camera feed (MJPEG stream)
-- 📊 Real-time detection stats
-- 📈 Growth tracking chart (Chart.js)
-- 🤖 Robot controller status
-- ⚙️ System configuration overview
+-  Live camera feed (MJPEG stream)
+-  Real-time detection stats
+-  Growth tracking chart (Chart.js)
+-  Robot controller status
+-  System configuration overview
 
-## 🤖 Robot Integration
+##  Robot Integration
 
 The system communicates with a robot arm (Arduino/ESP32) via Serial:
 
@@ -109,7 +109,7 @@ The system communicates with a robot arm (Arduino/ESP32) via Serial:
 
 Set `ROBOT_SIMULATION=false` in `.env` to enable live mode.
 
-## 📷 Data Collection
+##  Data Collection
 
 Interactive tool for collecting training images:
 
@@ -121,20 +121,20 @@ Interactive tool for collecting training images:
 | `S` | Show statistics |
 | `Q` | Quit |
 
-## 🔧 Hardware Requirements
+##  Hardware Requirements
 
 - **Camera**: USB webcam or built-in camera
 - **Optional**: NVIDIA GPU for faster inference
 - **Robot**: Arduino/ESP32 with serial connection
 - **Edge Deploy**: Raspberry Pi / NVIDIA Jetson Nano
 
-## 📚 References
+##  References
 
 - [Roboflow](https://roboflow.com/) — Model training & inference
 - [YOLOv8](https://docs.ultralytics.com/) — Object detection
 - [OpenCV](https://opencv.org/) — Computer vision library
 
-## 📖 TODO List
+##  TODO List
 
 See [todo-list.md](todo-list.md) for the full project roadmap.
 
