@@ -84,7 +84,7 @@ python main.py dashboard
 python main.py track
 ```
 
-## 🖥️ Dashboard
+##  Dashboard
 
 Access the web dashboard at `http://localhost:5000` after running:
 
